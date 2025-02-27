@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake Image Detector</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="app-header">
+            <h1>Fake Image Detector</h1>
+            <p class="app-description">Upload an image or use your webcam to detect fake images with AI</p>
+        </div>
+        
+        <!-- Input Options with Tabs -->
+        <div class="tabs">
+            <div class="tab-header">
+                <div class="tab-btn active" data-tab="file">
+                    <i class="fas fa-upload"></i> Upload
+                </div>
+                <div class="tab-btn" data-tab="webcam">
+                    <i class="fas fa-camera"></i> Webcam
+                </div>
+            </div>
+            
+            <div class="tab-content">
+                <div id="fileInput" class="tab-pane active">
+                    <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                    <div class="upload-box" onclick="triggerFileUpload()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Choose images from your files, or drag & drop here</p>
+                        <span>PNG, JPG or JPEG</span>
+                    </div>
+                </div>
+                <div id="webcamInput" class="tab-pane">
+                    <div class="webcam-container">
+                        <video id="webcamVideo" width="320" height="240"></video>
+                        <canvas id="webcamCanvas" width="224" height="224" style="display: none;"></canvas>
+                    </div>
+                    <button id="webcamButton" class="btn primary-btn" onclick="startWebcam()">
+                        <i class="fas fa-camera"></i> Start Webcam
+                    </button>
+                    <button id="captureButton" class="btn primary-btn" onclick="captureWebcam()" style="display: none;">
+                        <i class="fas fa-camera"></i> Capture
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Preview and Results Section -->
+        <div id="predictionResult" class="result-section">
+            <div id="imagePreview" class="image-preview" style="display: none;">
+                <img id="previewImage" src="/placeholder.svg" alt="Image Preview">
+                <div id="confidenceOverlay" class="confidence-overlay"></div>
+            </div>
+            
+            <div class="overlay-toggle">
+                <label class="switch">
+                    <input type="checkbox" id="overlayToggle" checked onchange="toggleOverlay()">
+                    <span class="slider round"></span>
+                </label>
+                <span>Show Confidence Overlay</span>
+            </div>
+            
+            <button id="predictButton" class="btn primary-btn" onclick="uploadImage()" style="display: none;">
+                <i class="fas fa-magic"></i> Analyze Image
+            </button>
+            
+            <div id="confidenceProgress" class="progress-container" style="display: none;">
+                <div id="progressBar" class="progress-bar"></div>
+            </div>
+            
+            <p id="predictionText" class="prediction-text"></p>
+            
+            <div id="resultCards" class="result-cards">
+                <div id="fakeResult" class="result-card fake" style="display: none;">
+                    <i class="fas fa-times-circle"></i>
+                    <span>Fake</span>
+                </div>
+                <div id="realResult" class="result-card real" style="display: none;">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Real</span>
+                </div>
+            </div>
+            
+            <div id="loading" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <span>Analyzing image...</span>
+            </div>
+        </div>
+        
+        <!-- History Section -->
+        <div id="historyResult" class="history-section" style="display: none;">
+            <h3><i class="fas fa-history"></i> Prediction History</h3>
+            <div class="history-container">
+                <ul id="historyList"></ul>
+            </div>
+        </div>
+        
+        <!-- Footer Buttons -->
+        <div class="footer-buttons">
+            <button id="historyButton" class="btn secondary-btn" onclick="toggleHistory()">
+                <i class="fas fa-history"></i> <span id="historyBtnText">View History</span>
+            </button>
+            <button id="newAnalysisButton" class="btn secondary-btn" onclick="resetAnalysis()" style="display: none;">
+                <i class="fas fa-redo"></i> New Analysis
+            </button>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
